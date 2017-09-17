@@ -15,20 +15,21 @@ public class ApplicationDriver {
     }
 
     private void buildModel() throws Exception {
-        BufferedReader dataFile = Commons.readDataFile(RESOURCES + "arff/train.arff");
-        Instances trainingData = new Instances(dataFile);
-        trainingData.setClassIndex(1);
+        BufferedReader trainFile = Commons.readDataFile(RESOURCES + "arff/train-cleaned.arff");
+        Instances trainData = new Instances(trainFile);
+        trainData.setClassIndex(1);
 
-        Classifiers cs = new Classifiers(trainingData);
+        BufferedReader testFile = Commons.readDataFile(RESOURCES + "arff/test-cleaned.arff");
+        Instances testData = new Instances(testFile);
+        testData.setClassIndex(0);
 
-//        Classifier classifier = cs.getSmoClassifier();
-//        Classifier classifier = cs.getMlpClassifier();
-        Classifier classifier = Classifiers.getStoredClassifier(RESOURCES+"models/weka-mlp.model");
+        Classifiers cs = new Classifiers(trainData, testData);
 
-        // todo remove excess attributes
+        Classifier classifier = Classifiers.getStoredClassifier(RESOURCES+"models/weka-cleaned-logboost-xval4.model");
+
         cs.evaluateClassifier(classifier);
 
-        Commons.classifyToCsv(classifier);
+        Commons.classifyToCsv(classifier, testData);
     }
 
 

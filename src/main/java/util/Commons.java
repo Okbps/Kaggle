@@ -11,19 +11,16 @@ import java.io.*;
 import static util.Globals.RESOURCES;
 
 public class Commons {
-    public static void classifyToCsv(Classifier classifier) throws Exception {
-        BufferedReader testFile = readDataFile(RESOURCES + "arff/test.arff");
-        Instances testData = new Instances(testFile);
-        Instances testingData = new Instances(testData, 0, 418);
-        testingData.setClassIndex(1);
-
+    public static void classifyToCsv(Classifier classifier, Instances testData) throws Exception {
         StringBuffer text = new StringBuffer("PassengerId,Survived\n");
 
-        for (Instance instance : testingData) {
+        int count = 892;
+        for (Instance instance : testData) {
             double d = classifier.classifyInstance(instance);
 
             text
-                    .append(String.format("%d", (long)instance.value(0)))
+//                    .append(String.format("%d", (long)instance.value(0)))
+                    .append(count++)
                     .append(",")
                     .append(String.format("%d", (long)d))
                     .append("\n");
